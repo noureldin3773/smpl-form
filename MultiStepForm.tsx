@@ -1,7 +1,34 @@
 import * as React from "react"
 import { addPropertyControls, ControlType } from "framer"
 
-export default function MultiStepForm(props) {
+type MultiStepFormProps = {
+    endpointUrl?: string
+    backgroundColor?: string
+    cardRadius?: number
+    padding?: number
+    primaryColor?: string
+    selectedBackground?: string
+    inputBackground?: string
+    borderColor?: string
+    textColor?: string
+    mutedTextColor?: string
+    titleSize?: number
+    bodySize?: number
+    buttonRadius?: number
+}
+
+type FormValues = {
+    direction: string
+    details: string
+    fullName: string
+    companyName: string
+    email: string
+    phone: string
+}
+
+type Step = 1 | 2 | 3 | 4
+
+export default function MultiStepForm(props: MultiStepFormProps) {
     const {
         endpointUrl = "https://formspree.io/f/your-form-id",
         backgroundColor = "#050505",
@@ -18,12 +45,12 @@ export default function MultiStepForm(props) {
         buttonRadius = 999,
     } = props
 
-    const [step, setStep] = React.useState(1)
+    const [step, setStep] = React.useState<Step>(1)
     const [status, setStatus] = React.useState("")
     const [isSubmitting, setIsSubmitting] = React.useState(false)
     const [hoveredDirection, setHoveredDirection] = React.useState("")
 
-    const [formData, setFormData] = React.useState({
+    const [formData, setFormData] = React.useState<FormValues>({
         direction: "",
         details: "",
         fullName: "",
@@ -44,7 +71,7 @@ export default function MultiStepForm(props) {
         "Other",
     ]
 
-    function updateField(field, value) {
+    function updateField(field: keyof FormValues, value: string) {
         setFormData((prev) => ({
             ...prev,
             [field]: value,
@@ -82,7 +109,7 @@ export default function MultiStepForm(props) {
 
     const progress = Math.round((step / 3) * 100)
 
-    const styles = {
+    const styles: Record<string, React.CSSProperties> = {
         wrapper: {
             width: "100%",
             padding: padding,
@@ -334,7 +361,7 @@ export default function MultiStepForm(props) {
                 <>
                     <h2 style={styles.title}>Almost Done</h2>
                     <p style={styles.subtitle}>
-                        Leave your contact details and we’ll get back to you.
+                        Leave your contact details and we'll get back to you.
                     </p>
 
                     <input
